@@ -10,7 +10,7 @@ FPS = 30
 SCREENWIDTH  = 288
 SCREENHEIGHT = 512
 # amount by which base can maximum shift to left
-PIPEGAPSIZE  = 100 # gap between upper and lower part of pipe
+PIPEGAPSIZE  = 240 # gap between upper and lower part of pipe
 BASEY        = SCREENHEIGHT * 0.79
 # image, sound and hitmask  dicts
 IMAGES, SOUNDS, HITMASKS = {}, {}, {}
@@ -135,7 +135,6 @@ def main():
         crashInfo = mainGame(movementInfo)
         showGameOverScreen(crashInfo)
 
-
 def showWelcomeAnimation():
     """Shows welcome screen animation of flappy bird"""
     # index of player to blit on screen
@@ -187,7 +186,6 @@ def showWelcomeAnimation():
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
-
 
 def mainGame(movementInfo):
     score = playerIndex = loopIter = 0
@@ -321,7 +319,6 @@ def mainGame(movementInfo):
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
-
 def showGameOverScreen(crashInfo):
     """crashes the player down ans shows gameover image"""
     score = crashInfo['score']
@@ -380,7 +377,6 @@ def showGameOverScreen(crashInfo):
         FPSCLOCK.tick(FPS)
         pygame.display.update()
 
-
 def playerShm(playerShm):
     """oscillates the value of playerShm['val'] between 8 and -8"""
     if abs(playerShm['val']) == 8:
@@ -390,7 +386,6 @@ def playerShm(playerShm):
          playerShm['val'] += 1
     else:
         playerShm['val'] -= 1
-
 
 def getRandomPipe():
     """returns a randomly generated pipe"""
@@ -404,7 +399,6 @@ def getRandomPipe():
         {'x': pipeX, 'y': gapY - pipeHeight},  # upper pipe
         {'x': pipeX, 'y': gapY + PIPEGAPSIZE}, # lower pipe
     ]
-
 
 def showScore(score):
     """displays score in center of screen"""
@@ -420,7 +414,6 @@ def showScore(score):
         SCREEN.blit(IMAGES['numbers'][digit], (Xoffset, SCREENHEIGHT * 0.1))
         Xoffset += IMAGES['numbers'][digit].get_width()
 
-
 def checkCrash(player, upperPipes, lowerPipes):
     """returns True if player collders with base or pipes."""
     pi = player['index']
@@ -429,7 +422,7 @@ def checkCrash(player, upperPipes, lowerPipes):
 
     # if player crashes into ground
     if player['y'] + player['h'] >= BASEY - 1:
-        return [True, True]
+        return [False, False]
     else:
 
         playerRect = pygame.Rect(player['x'], player['y'],
@@ -452,7 +445,7 @@ def checkCrash(player, upperPipes, lowerPipes):
             lCollide = pixelCollision(playerRect, lPipeRect, pHitMask, lHitmask)
 
             if uCollide or lCollide:
-                return [True, False]
+                return [False, False]
 
     return [False, False]
 
